@@ -1,3 +1,7 @@
+#####################################################
+# Created by cryptopool.builders for crypto use...
+#####################################################
+
 clear
 source $STORAGE_ROOT/coin_builder/.my.cnf
 source $STORAGE_ROOT/coin_builder/temp_coin_builds/.lastcoin.conf

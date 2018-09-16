@@ -1,4 +1,5 @@
 #!/bin/bash
+#####################################################
 # This is the entry point for configuring the system.
 # Source https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox
 # Updated by cryptopool.builders for crypto use...
@@ -19,7 +20,7 @@ bash start.sh
 cd ~
 ' | sudo -E tee /usr/bin/coinbuilder >/dev/null 2>&1
 sudo chmod +x /usr/bin/coinbuilder
-fi 
+fi
 
 cd $STORAGE_ROOT/coin_builder
 source start.sh
