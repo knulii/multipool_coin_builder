@@ -8,7 +8,7 @@
 source /etc/functions.sh # load our functions
 source /etc/multipool.conf
 
-cd $STORAGE_ROOT/coin_builder
+cd $HOME/multipool/daemon_builder
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
 # Python may not be able to read/write files. This is also
@@ -28,9 +28,9 @@ export LC_TYPE=en_US.UTF-8
 export NCURSES_NO_UTF8_ACS=1
 
 # Create the temporary installation directory if it doesn't already exist.
-echo Creating the temporary YiiMP installation folder...
-if [ ! -d $STORAGE_ROOT/coin_builder/temp_coin_builds ]; then
-mkdir -p $STORAGE_ROOT/coin_builder/temp_coin_builds
+echo Creating the temporary build folder...
+if [ ! -d $STORAGE_ROOT/daemon_builder/temp_coin_builds ]; then
+mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
 fi
 
 message_box "Ultimate Crypto-Server Daemon Installer" \

@@ -7,20 +7,17 @@
 
 source /etc/functions.sh # load our functions
 source /etc/multipool.conf
-tmpdir=$PWD
-if [ ! -d $STORAGE_ROOT/coin_builder ]; then
-mkdir -p $STORAGE_ROOT/coin_builder
-sudo cp -r $tmpdir/. $STORAGE_ROOT/coin_builder
+
 echo '
 #!/bin/bash
 source /etc/functions.sh # load our functions
 source /etc/multipool.conf
-cd $STORAGE_ROOT/coin_builder
+cd $HOME/multipool/daemon_builder
 bash start.sh
 cd ~
-' | sudo -E tee /usr/bin/coinbuilder >/dev/null 2>&1
-sudo chmod +x /usr/bin/coinbuilder
+' | sudo -E tee /usr/bin/daemonbuilder >/dev/null 2>&1
+sudo chmod +x /usr/bin/daemonbuilder
 fi
 
-cd $STORAGE_ROOT/coin_builder
+cd $HOME/multipool/daemon_builder
 source start.sh

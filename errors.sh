@@ -4,7 +4,7 @@
 #####################################################
 
 source /etc/functions.sh
-cd $STORAGE_ROOT/coin_builder
+cd $HOME/multipool/daemon_builder
 
 RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --menu "Choose one" -1 60 4 \
 1 "Fix invalid application of sizeof error" \

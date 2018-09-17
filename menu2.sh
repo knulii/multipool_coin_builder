@@ -4,7 +4,7 @@
 #####################################################
 
 source /etc/functions.sh
-cd $STORAGE_ROOT/coin_builder
+cd $HOME/multipool/daemon_builder
 
 RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --menu "Choose one" -1 60 4 \
 1 "Install Berkeley 4.x Coin with autogen file" \
@@ -22,7 +22,7 @@ clear;
 echo '
 autogen=true
 berkeley="4.8"
-' | sudo -E tee $STORAGE_ROOT/coin_builder/.my.cnf >/dev/null 2>&1;
+' | sudo -E tee $HOME/multipool/daemon_builder/.my.cnf >/dev/null 2>&1;
 source source.sh;
 fi
 
@@ -32,7 +32,7 @@ clear;
 echo '
 autogen=true
 berkeley="5.3"
-' | sudo -E tee $STORAGE_ROOT/coin_builder/.my.cnf >/dev/null 2>&1;
+' | sudo -E tee $HOME/multipool/daemon_builder/.my.cnf >/dev/null 2>&1;
 source source.sh;
 fi
 
@@ -41,7 +41,7 @@ then
 clear;
 echo '
 autogen=false
-' | sudo -E tee $STORAGE_ROOT/coin_builder/.my.cnf >/dev/null 2>&1;
+' | sudo -E tee $HOME/multipool/daemon_builder/.my.cnff >/dev/null 2>&1;
 source source.sh;
 fi
 
