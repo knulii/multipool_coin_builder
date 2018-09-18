@@ -3,30 +3,49 @@
 #####################################################
 
 clear
-source $STORAGE_ROOT/daemon_builder/.my.cnf
+
+source /etc/functions.sh
+source $HOME/multipool/daemon_builder/.my.cnf
 source $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin
+
+# Set what we need
+now=$(date +"%m_%d_%Y")
+set -e
+NPROC=$(nproc)
+
+# re-run autogen file
 sh autogen.sh
+
+# Build the coin under the proper configuration adding openSSL location
 if [[ ("$berkeley" == "4.8") ]]; then
 ./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db4/include -I$STORAGE_ROOT/openssl/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db4/lib -L$STORAGE_ROOT/openssl/lib" --without-gui --disable-tests
 else
 ./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db5/include -I$STORAGE_ROOT/openssl/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db5/lib -L$STORAGE_ROOT/openssl/lib" --without-gui --disable-tests
 fi
 make -j$(nproc)
+
 clear
+
+# LS the SRC dir to have user input bitcoind and bitcoin-cli names
 ls $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/
 read -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
 read -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
 read -e -p "Please enter the coin-cli name :" coincli
 fi
+
 clear
+
+# Strip and copy to /usr/bin
 sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/$coind
 sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/$coind /usr/bin
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
 sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/$coincli
 sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/$coincli /usr/bin
 fi
+
+# Make the new wallet folder have user paste the coin.conf and finally start the daemon
 if [[ ! -e '$STORAGE_ROOT/wallets' ]]; then
 mkdir -p $STORAGE_ROOT/wallets
 fi
@@ -37,6 +56,7 @@ sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf
 clear
 echo "Starting ${coind::-1}"
 /usr/bin/"${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}.conf" -daemon -shrinkdebugfile
+
 # If we made it this far everything built fine removing last coin.conf and build directory
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir

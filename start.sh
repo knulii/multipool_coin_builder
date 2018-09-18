@@ -30,8 +30,10 @@ export NCURSES_NO_UTF8_ACS=1
 # Create the temporary installation directory if it doesn't already exist.
 echo Creating the temporary build folder...
 if [ ! -d $STORAGE_ROOT/daemon_builder/temp_coin_builds ]; then
-mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
+sudo mkdir -p $STORAGE_ROOT/daemon_builder
+sudo mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
 fi
+sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/daemon_builder
 
 message_box "Ultimate Crypto-Server Daemon Installer" \
 "Warning! This version of the daemon installer only works with servers setup with the Ultimate Crypto-Server Installer!

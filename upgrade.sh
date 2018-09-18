@@ -1,45 +1,53 @@
 #####################################################
 # Created by cryptopool.builders for crypto use...
 #####################################################
-
 clear
+
 source /etc/functions.sh
-source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/daemon_builder/.my.cnf
 cd $HOME/multipool/daemon_builder
 
+# Set what we need
+now=$(date +"%m_%d_%Y")
+set -e
+NPROC=$(nproc)
+if [[ ! -e '$STORAGE_ROOT/coin_builder/temp_coin_builds' ]]; then
+sudo mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
+else
+echo "temp_coin_builds already exists.... Skipping"
+fi
+
+# Just double checking folder permissions
+sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/daemon_builder/temp_coin_builds
+
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
+
+# Kill the old coin and get the github info
 read -e -p "Enter the name of the coin : " coin
 read -e -p "Paste the github link for the coin : " git_hub
 read -e -p "Enter the coind name as it is in yiimp, example bitcoind : " pkillcoin
 read -n 1 -s -r -p "I am now going to kill $pkillcoin so the update can continue. Press any key to continue"
 sudo pkill -9 $pkillcoin
 
-now=$(date +"%m_%d_%Y")
-set -e
-NPROC=$(nproc)
-
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds' ]]; then
-mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
-else
-echo "temp_coin_builds already exists.... Skipping"
-fi
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
-
 coindir=$coin$now
+
 # save last coin information in case coin build fails
 echo '
 lastcoin='"${coindir}"'
 ' | sudo -E tee $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf >/dev/null 2>&1
-# create coin user and directory
 
+# Clone the coin
 if [[ ! -e $coindir ]]; then
 git clone $git_hub $coindir
 else
 echo "$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir already exists.... Skipping"
+echo "If there was an error in the build use the build error options on the installer"
 exit 0
 fi
-sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir
+
 cd "${coindir}"
+
+# Build the coin under the proper configuration
 if [[ ("$autogen" == "true") ]]; then
 if [[ ("$berkeley" == "4.8") ]]; then
 echo "Building using Berkeley 4.8..."
@@ -78,21 +86,29 @@ cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src
 sed -i '/USE_UPNP:=0/i BDB_LIB_PATH = /home/crypto-data/berkeley/db4/lib\nBDB_INCLUDE_PATH = /home/crypto-data/berkeley/db4/include\nOPENSSL_LIB_PATH = /home/crypto-data/openssl/lib\nOPENSSL_INCLUDE_PATH = /home/crypto-data/openssl/include' makefile.unix
 make -j$NPROC -f makefile.unix USE_UPNP=-
 fi
+
 clear
+
+# LS the SRC dir to have user input bitcoind and bitcoin-cli names
 ls $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/
 read -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
 read -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
+
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
 read -e -p "Please enter the coin-cli name :" coincli
 fi
+
 clear
+
+# Strip and copy to /usr/bin
 sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coind
 sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coind /usr/bin
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
 sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coincli
 sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coincli /usr/bin
 fi
-mkdir -p $STORAGE_ROOT/wallets/."${coind::-1}"
+
+# Have user verify con.conf file and start coin
 echo "I am now going to open nano, please verify if there any changes that are needed such as adding or removing addnodes."
 read -n 1 -s -r -p "Press any key to continue"
 sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf
