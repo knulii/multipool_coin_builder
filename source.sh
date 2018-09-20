@@ -3,6 +3,7 @@
 #####################################################
 
 source /etc/functions.sh
+source /etc/multipool.conf
 source $HOME/multipool/daemon_builder/.my.cnf
 cd $HOME/multipool/daemon_builder
 
@@ -106,7 +107,7 @@ fi
 
 # Make the new wallet folder have user paste the coin.conf and finally start the daemon
 if [[ ! -e '$STORAGE_ROOT/wallets' ]]; then
-mkdir -p $STORAGE_ROOT/wallets
+sudo mkdir -p $STORAGE_ROOT/wallets
 fi
 
 sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/wallets
