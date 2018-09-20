@@ -49,6 +49,8 @@ fi
 if [[ ! -e '$STORAGE_ROOT/wallets' ]]; then
 mkdir -p $STORAGE_ROOT/wallets
 fi
+
+sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/wallets
 mkdir -p $STORAGE_ROOT/wallets/."${coind::-1}"
 echo "I am now going to open nano, please copy and paste the config from yiimp in to this file."
 read -n 1 -s -r -p "Press any key to continue"
