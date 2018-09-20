@@ -17,7 +17,6 @@ bash start.sh
 cd ~
 ' | sudo -E tee /usr/bin/daemonbuilder >/dev/null 2>&1
 sudo chmod +x /usr/bin/daemonbuilder
-fi
 
 cd $HOME/multipool/daemon_builder
 source start.sh
