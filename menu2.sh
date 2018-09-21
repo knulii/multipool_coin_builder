@@ -41,7 +41,7 @@ then
 clear;
 echo '
 autogen=false
-' | sudo -E tee $HOME/multipool/daemon_builder/.my.cnff >/dev/null 2>&1;
+' | sudo -E tee $HOME/multipool/daemon_builder/.my.cnf >/dev/null 2>&1;
 source source.sh;
 fi
 
