@@ -9,6 +9,7 @@ cd $HOME/multipool/daemon_builder
 RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --menu "Choose one" -1 60 4 \
 1 "Fix invalid application of sizeof error" \
 2 "Fix openSSL 1.1x incompatibilities" \
+3 "Linked against older build requires make clean"
 4 Exit)
 if [ $RESULT = ]
 then
@@ -32,6 +33,7 @@ fi
 if [ $RESULT = 3 ]
 then
 clear;
+source make_clean.sh
 exit;
 fi
 
