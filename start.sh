@@ -44,4 +44,4 @@ source menu.sh
 
 clear
 echo Installation of your coin daemon is completed.
-echo Type coinbuilder at anytime to install a new coin!
+echo Type daemonbuilder at anytime to install a new coin!
