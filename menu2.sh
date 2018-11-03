@@ -13,7 +13,7 @@ RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --men
 4 Exit)
 if [ $RESULT = ]
 then
-exit ;
+exit;
 fi
 
 if [ $RESULT = 1 ]
