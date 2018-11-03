@@ -5,7 +5,7 @@
 clear
 
 source /etc/functions.sh
-source multipool.conf
+source /etc/multipool.conf
 source $HOME/multipool/daemon_builder/.my.cnf
 source $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin
