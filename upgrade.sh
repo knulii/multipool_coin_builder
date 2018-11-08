@@ -54,15 +54,23 @@ if [[ ("$berkeley" == "4.8") ]]; then
 echo "Building using Berkeley 4.8..."
 basedir=$(pwd)
 sh autogen.sh
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh' ]]; then
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh
+fi
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform' ]]; then
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform
+fi
 ./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db4/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db4/lib" --without-gui --disable-tests
 else
 echo "Building using Berkeley 5.3..."
 basedir=$(pwd)
 sh autogen.sh
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh' ]]; then
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh
+fi
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform' ]]; then
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform
+fi
 ./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db5/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db5/lib" --without-gui --disable-tests
 fi
 make -j$(nproc)

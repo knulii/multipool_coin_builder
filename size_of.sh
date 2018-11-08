@@ -15,30 +15,35 @@ now=$(date +"%m_%d_%Y")
 set -e
 NPROC=$(nproc)
 
-# re-run autogen file
-make clean
-sh autogen.sh
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh' ]]; then
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh
-fi
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform' ]]; then
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform
-fi
-# Build the coin under the proper configuration adding openSSL location
-if [[ ("$berkeley" == "4.8") ]]; then
-./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db4/include -O2 -fPIC" LDFLAGS="-L$STORAGE_ROOT/berkeley/db4/lib" --without-gui --disable-tests
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src
+sudo sed -i 's/<const\ CScriptID\&/<CScriptID/' rpcrawtransaction.cpp
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/obj' ]]; then
+mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/obj
 else
-./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db5/include -O2 -fPIC" LDFLAGS="-L$STORAGE_ROOT/berkeley/db5/lib" --without-gui --disable-tests
+echo "Hey the developer did his job and the src/obj dir is there!"
 fi
-make -j$(nproc)
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/obj/zerocoin' ]]; then
+mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/obj/zerocoin
+else
+echo  "Wow even the /src/obj/zerocoin is there! Good job developer!"
+fi
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb
+sudo chmod +x build_detect_platform
+sudo make clean
+sudo make libleveldb.a libmemenv.a
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src
+sed -i '/USE_UPNP:=0/i BDB_LIB_PATH = /home/crypto-data/berkeley/db4/lib\nBDB_INCLUDE_PATH = /home/crypto-data/berkeley/db4/include\nOPENSSL_LIB_PATH = /home/crypto-data/openssl/lib\nOPENSSL_INCLUDE_PATH = /home/crypto-data/openssl/include' makefile.unix
+make -j$NPROC -f makefile.unix USE_UPNP=-
+fi
 
 clear
 
 # LS the SRC dir to have user input bitcoind and bitcoin-cli names
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/
 find . -maxdepth 1 -type f \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
 read -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
 read -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
+
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
 read -e -p "Please enter the coin-cli name :" coincli
 fi
@@ -46,11 +51,11 @@ fi
 clear
 
 # Strip and copy to /usr/bin
-sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/$coind
-sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/$coind /usr/bin
+sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coind
+sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coind /usr/bin
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
-sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/$coincli
-sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/$coincli /usr/bin
+sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coincli
+sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coincli /usr/bin
 fi
 
 # Make the new wallet folder have user paste the coin.conf and finally start the daemon

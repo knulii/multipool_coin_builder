@@ -18,7 +18,12 @@ NPROC=$(nproc)
 # re-run autogen file
 make clean
 sh autogen.sh
-
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh
+fi
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform
+fi
 # Build the coin under the proper configuration adding openSSL location
 if [[ ("$berkeley" == "4.8") ]]; then
   ./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db4/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db4/lib" --without-gui --disable-tests
