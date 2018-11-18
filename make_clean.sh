@@ -18,11 +18,11 @@ NPROC=$(nproc)
 # re-run autogen file
 make clean
 sh autogen.sh
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh' ]]; then
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/share/genbuild.sh' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/share/genbuild.sh
 fi
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform' ]]; then
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/leveldb/build_detect_platform' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/leveldb/build_detect_platform
 fi
 # Build the coin under the proper configuration adding openSSL location
 if [[ ("$berkeley" == "4.8") ]]; then
@@ -35,7 +35,7 @@ make -j$(nproc)
 clear
 
 # LS the SRC dir to have user input bitcoind and bitcoin-cli names
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/
 find . -maxdepth 1 -type f \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
 read -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
 read -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
@@ -69,7 +69,7 @@ echo "Starting ${coind::-1}"
 
 # If we made it this far everything built fine removing last coin.conf and build directory
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
-sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir
+sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin
 sudo rm -r $HOME/multipool/daemon_builder/.my.cnf
 cd $HOME/multipool/daemon_builder
 
