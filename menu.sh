@@ -6,12 +6,11 @@
 source /etc/functions.sh
 cd $HOME/multipool/daemon_builder
 
-RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer v1.06" --menu "Choose one" -1 60 5 \
+RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer v1.08" --menu "Choose one" -1 60 5 \
 1 "Install New Coin from Source" \
-2 "Install New Coin from Release" \
-3 "Upgrade Existing Coin" \
-4 "Fix Coin Errors on last build attempt" \
-5 Exit)
+2 "Upgrade Existing Coin" \
+3 "Fix Coin Errors on last build attempt" \
+4 Exit)
 if [ $RESULT = ]
 then
 exit;
@@ -35,17 +34,10 @@ if [ $RESULT = 3 ]
 then
 clear;
 cd $HOME/multipool/daemon_builder
-source menu4.sh;
-fi
-
-if [ $RESULT = 4 ]
-then
-clear;
-cd $HOME/multipool/daemon_builder
 source errors.sh;
 fi
 
-if [ $RESULT = 5 ]
+if [ $RESULT = 4 ]
 then
 clear;
 exit;

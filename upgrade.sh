@@ -27,8 +27,6 @@ cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
 read -e -p "Enter the name of the coin : " coin
 read -e -p "Paste the github link for the coin : " git_hub
 read -e -p "Enter the coind name as it is in yiimp, example bitcoind : " pkillcoin
-read -n 1 -s -r -p "I am now going to kill $pkillcoin so the update can continue. Press any key to continue"
-sudo pkill -9 $pkillcoin
 
 coindir=$coin$now
 
@@ -111,6 +109,7 @@ fi
 clear
 
 # Strip and copy to /usr/bin
+sudo pkill -9 $pkillcoin
 sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coind
 sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coind /usr/bin
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
