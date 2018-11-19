@@ -1,7 +1,6 @@
 #####################################################
 # Created by cryptopool.builders for crypto use...
 #####################################################
-clear
 
 source /etc/functions.sh
 source /etc/multipool.conf

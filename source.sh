@@ -137,3 +137,4 @@ cd $HOME/multipool/daemon_builder
 clear
 echo "Installation of ${coind::-1} is completed and running."
 echo Type daemonbuilder at anytime to install a new coin!
+exit 0

@@ -6,7 +6,7 @@
 source /etc/functions.sh
 cd $HOME/multipool/daemon_builder
 
-RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer v1.09" --menu "Choose one" -1 60 5 \
+RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer v1.09" --menu "Choose one" -1 60 4 \
 1 "Install New Coin from Source" \
 2 "Upgrade Existing Coin" \
 3 "Fix Coin Errors on last build attempt" \
