@@ -4,7 +4,7 @@
 clear
 
 source /etc/functions.sh
-source /etc/multipool
+source /etc/multipool.conf
 source $HOME/multipool/daemon_builder/.my.cnf
 cd $HOME/multipool/daemon_builder
 

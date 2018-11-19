@@ -23,7 +23,7 @@ echo '
 autogen=true
 berkeley="4.8"
 ' | sudo -E tee $HOME/multipool/daemon_builder/.my.cnf >/dev/null 2>&1;
-source update.sh;
+source upgrade.sh;
 fi
 
 if [ $RESULT = 2 ]
@@ -33,7 +33,7 @@ echo '
 autogen=true
 berkeley="5.3"
 ' | sudo -E tee $HOME/multipool/daemon_builder/.my.cnf >/dev/null 2>&1;
-source update.sh;
+source upgrade.sh;
 fi
 
 if [ $RESULT = 3 ]
@@ -42,7 +42,7 @@ clear;
 echo '
 autogen=false
 ' | sudo -E tee $HOME/multipool/daemon_builder/.my.cnf >/dev/null 2>&1;
-source update.sh;
+source upgrade.sh;
 fi
 
 if [ $RESULT = 4 ]
