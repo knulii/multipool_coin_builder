@@ -121,6 +121,7 @@ echo "I am now going to open nano, please verify if there any changes that are n
 read -n 1 -s -r -p "Press any key to continue"
 sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf
 clear
+cd $HOME/multipool/daemon_builder
 echo "Starting ${coind::-1}"
 /usr/bin/"${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}.conf" -daemon -shrinkdebugfile -reindex
 
@@ -128,7 +129,7 @@ echo "Starting ${coind::-1}"
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir
 sudo rm -r $HOME/multipool/daemon_builder/.my.cnf
-cd $HOME/multipool/daemon_builder
+
 
 clear
 echo "Upgrade of ${coind::-1} is completed and running. The blockchain is being reindexed, it could be several minutes before you can connect to your coin."
