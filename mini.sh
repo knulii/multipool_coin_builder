@@ -15,25 +15,21 @@ now=$(date +"%m_%d_%Y")
 set -e
 NPROC=$(nproc)
 
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src
-sudo sed -i 's/<const\ CScriptID\&/<CScriptID/' rpcrawtransaction.cpp
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/obj' ]]; then
-mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/obj
-else
-echo "Hey the developer did his job and the src/obj dir is there!"
+# re-run autogen file
+sh autogen.sh
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/share/genbuild.sh' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/share/genbuild.sh
 fi
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/obj/zerocoin' ]]; then
-mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/obj/zerocoin
-else
-echo  "Wow even the /src/obj/zerocoin is there! Good job developer!"
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/leveldb/build_detect_platform' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/leveldb/build_detect_platform
 fi
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/leveldb
-sudo chmod +x build_detect_platform
-sudo make clean
-sudo make libleveldb.a libmemenv.a
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src
-sed -i '/USE_UPNP:=0/i BDB_LIB_PATH = /home/crypto-data/berkeley/db4/lib\nBDB_INCLUDE_PATH = /home/crypto-data/berkeley/db4/include\nOPENSSL_LIB_PATH = /home/crypto-data/openssl/lib\nOPENSSL_INCLUDE_PATH = /home/crypto-data/openssl/include' makefile.unix
-make -j$NPROC -f makefile.unix USE_UPNP=-
+# Build the coin under the proper configuration adding openSSL location
+if [[ ("$berkeley" == "4.8") ]]; then
+./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db4/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db4/lib" --without-gui --disable-tests --without-miniupnpc
+else
+./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db5/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db5/lib" --without-gui --disable-tests --without-miniupnpc
+fi
+make -j$(nproc)
 
 clear
 
@@ -42,7 +38,6 @@ cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin/src/
 find . -maxdepth 1 -type f \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
 read -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
 read -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
-
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
 read -e -p "Please enter the coin-cli name :" coincli
 fi
