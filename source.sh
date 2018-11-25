@@ -127,7 +127,7 @@ sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf
 clear
 cd $HOME/multipool/daemon_builder
 echo "Starting ${coind::-1}"
-/usr/bin/"${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}.conf" -daemon -shrinkdebugfile
+"${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}.conf" -daemon -shrinkdebugfile
 
 # If we made it this far everything built fine removing last coin.conf and build directory
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
@@ -138,4 +138,4 @@ sudo rm -r $HOME/multipool/daemon_builder/.my.cnf
 clear
 echo "Installation of ${coind::-1} is completed and running."
 echo Type daemonbuilder at anytime to install a new coin!
-exit 0
+exit

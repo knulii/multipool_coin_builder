@@ -123,7 +123,7 @@ sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf
 clear
 cd $HOME/multipool/daemon_builder
 echo "Starting ${coind::-1}"
-/usr/bin/"${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}.conf" -daemon -shrinkdebugfile -reindex
+"${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}.conf" -daemon -shrinkdebugfile -reindex
 
 # If we made it this far everything built fine removing last coin.conf and build directory
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
