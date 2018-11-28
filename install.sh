@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #####################################################
 # This is the entry point for configuring the system.
 # Source https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox
@@ -9,7 +9,7 @@ source /etc/functions.sh # load our functions
 source /etc/multipool.conf
 
 echo '
-#!/bin/bash
+#!/usr/bin/env bash
 source /etc/functions.sh # load our functions
 source /etc/multipool.conf
 cd $HOME/multipool/daemon_builder
