@@ -38,7 +38,7 @@ lastcoin='"${coindir}"'
 if [[ ! -e $coindir ]]; then
 git clone $git_hub $coindir
 else
-echo "$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir already exists.... Skipping"
+echo "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir} already exists.... Skipping"
 echo "If there was an error in the build use the build error options on the installer"
 exit 0
 fi
@@ -51,44 +51,44 @@ if [[ ("$berkeley" == "4.8") ]]; then
 echo "Building using Berkeley 4.8..."
 basedir=$(pwd)
 sh autogen.sh
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh' ]]; then
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh
 fi
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform' ]]; then
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
 fi
-./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db4/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db4/lib" --without-gui --disable-tests
+./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db4/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db4/lib" --without-gui --disable-tests
 else
 echo "Building using Berkeley 5.3..."
 basedir=$(pwd)
 sh autogen.sh
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh' ]]; then
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/share/genbuild.sh
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh
 fi
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform' ]]; then
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb/build_detect_platform
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform' ]]; then
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
 fi
-./configure CPPFLAGS="-I$STORAGE_ROOT/berkeley/db5/include -O2" LDFLAGS="-L$STORAGE_ROOT/berkeley/db5/lib" --without-gui --disable-tests
+./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5/lib" --without-gui --disable-tests
 fi
 make -j$(nproc)
 else
 echo "Building using makefile.unix method..."
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/obj' ]]; then
- mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/obj
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/obj' ]]; then
+ mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/obj
         else
     echo "Hey the developer did his job and the src/obj dir is there!"
 fi
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/obj/zerocoin' ]]; then
-mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/obj/zerocoin
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/obj/zerocoin' ]]; then
+mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/obj/zerocoin
 else
 echo  "Wow even the /src/obj/zerocoin is there! Good job developer!"
 fi
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/leveldb
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb
 sudo chmod +x build_detect_platform
 sudo make clean
 sudo make libleveldb.a libmemenv.a
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src
 sed -i '/USE_UPNP:=0/i BDB_LIB_PATH = /home/crypto-data/berkeley/db4/lib\nBDB_INCLUDE_PATH = /home/crypto-data/berkeley/db4/include\nOPENSSL_LIB_PATH = /home/crypto-data/openssl/lib\nOPENSSL_INCLUDE_PATH = /home/crypto-data/openssl/include' makefile.unix
 make -j$NPROC -f makefile.unix USE_UPNP=-
 fi
@@ -96,7 +96,7 @@ fi
 clear
 
 # LS the SRC dir to have user input bitcoind and bitcoin-cli names
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/
 find . -maxdepth 1 -type f \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
 read -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
 read -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
@@ -108,12 +108,12 @@ fi
 clear
 
 # Strip and copy to /usr/bin
-sudo pkill -9 $pkillcoin
-sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coind
-sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coind /usr/bin
+sudo pkill -9 ${pkillcoin}
+sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coind}
+sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coind} /usr/bin
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
-sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coincli
-sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir/src/$coincli /usr/bin
+sudo strip $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coincli}
+sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coincli} /usr/bin
 fi
 
 # Have user verify con.conf file and start coin
@@ -127,7 +127,7 @@ echo "Starting ${coind::-1}"
 
 # If we made it this far everything built fine removing last coin.conf and build directory
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
-sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/$coindir
+sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
 sudo rm -r $HOME/multipool/daemon_builder/.my.cnf
 
 

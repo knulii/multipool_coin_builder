@@ -8,7 +8,7 @@ source /etc/functions.sh
 source /etc/multipool.conf
 source $HOME/multipool/daemon_builder/.my.cnf
 source $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/$lastcoin
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}
 
 # Set what we need
 now=$(date +"%m_%d_%Y")
