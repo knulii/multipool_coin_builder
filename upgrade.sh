@@ -52,9 +52,13 @@ echo "Building using Berkeley 4.8..."
 basedir=$(pwd)
 sh autogen.sh
 if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh' ]]; then
+  echo "genbuild.sh not found skipping"
+else
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh
 fi
 if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform' ]]; then
+  echo "build_detect_platform not found skipping"
+else
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
 fi
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db4/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db4/lib" --without-gui --disable-tests
@@ -63,9 +67,13 @@ echo "Building using Berkeley 5.3..."
 basedir=$(pwd)
 sh autogen.sh
 if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh' ]]; then
+  echo "genbuild.sh not found skipping"
+else
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh
 fi
 if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform' ]]; then
+  echo "build_detect_platform not found skipping"
+else
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
 fi
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5/lib" --without-gui --disable-tests
@@ -90,6 +98,7 @@ sudo make clean
 sudo make libleveldb.a libmemenv.a
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src
 sed -i '/USE_UPNP:=0/i BDB_LIB_PATH = /home/crypto-data/berkeley/db4/lib\nBDB_INCLUDE_PATH = /home/crypto-data/berkeley/db4/include\nOPENSSL_LIB_PATH = /home/crypto-data/openssl/lib\nOPENSSL_INCLUDE_PATH = /home/crypto-data/openssl/include' makefile.unix
+sed -i '/USE_UPNP:=1/i BDB_LIB_PATH = /home/crypto-data/berkeley/db4/lib\nBDB_INCLUDE_PATH = /home/crypto-data/berkeley/db4/include\nOPENSSL_LIB_PATH = /home/crypto-data/openssl/lib\nOPENSSL_INCLUDE_PATH = /home/crypto-data/openssl/include' makefile.unix
 make -j$NPROC -f makefile.unix USE_UPNP=-
 fi
 

@@ -18,9 +18,13 @@ NPROC=$(nproc)
 # re-run autogen file
 sh autogen.sh
 if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/share/genbuild.sh' ]]; then
+  echo "genbuild.sh not found skipping"
+else
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/share/genbuild.sh
 fi
 if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/src/leveldb/build_detect_platform' ]]; then
+  echo "build_detect_platform not found skipping"
+else
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/src/leveldb/build_detect_platform
 fi
 # Build the coin under the proper configuration adding openSSL location
