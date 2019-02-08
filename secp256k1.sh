@@ -5,44 +5,20 @@
 source /etc/functions.sh
 source /etc/multipool.conf
 source $HOME/multipool/daemon_builder/.my.cnf
-cd $HOME/multipool/daemon_builder
+source $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
+cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}
 
 # Set what we need
 now=$(date +"%m_%d_%Y")
 set -e
 NPROC=$(nproc)
-if [[ ! -e '$STORAGE_ROOT/coin_builder/temp_coin_builds' ]]; then
-sudo mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
-else
-echo "temp_coin_builds already exists.... Skipping"
-fi
 
-# Just double checking folder permissions
-sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/daemon_builder/temp_coin_builds
+# clean the build directory, that could be some of the permissions issue
+make clean
 
-cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
-
-# Get the github information
-read -e -p "Enter the name of the coin : " coin
-read -e -p "Paste the github link for the coin : " git_hub
-
-coindir=$coin$now
-
-# save last coin information in case coin build fails
-echo '
-lastcoin='"${coindir}"'
-' | sudo -E tee $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf >/dev/null 2>&1
-
-# Clone the coin
-if [[ ! -e $coindir ]]; then
-git clone $git_hub $coindir
-else
-echo "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir} already exists.... Skipping"
-echo "If there was an error in the build use the build error options on the installer"
-exit 0
-fi
-
-cd "${coindir}"
+#Re-running the permissions string even though it runs the first time, some coins who the hell knows why.
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/share/genbuild.sh
+sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/src/leveldb/build_detect_platform
 
 # Build the coin under the proper configuration
 if [[ ("$autogen" == "true") ]]; then
@@ -50,32 +26,20 @@ if [[ ("$berkeley" == "4.8") ]]; then
 echo "Building using Berkeley 4.8..."
 basedir=$(pwd)
 sh autogen.sh
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh' ]]; then
-  echo "genbuild.sh not found skipping"
-else
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh
-fi
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform' ]]; then
-  echo "build_detect_platform not found skipping"
-else
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
-fi
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db4/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db4/lib" --without-gui --disable-tests
+cd src
+rm -r secp256k1
+git clone https://github.com/bitcoin-core/secp256k1.git
+cd ..
 else
 echo "Building using Berkeley 5.3..."
 basedir=$(pwd)
 sh autogen.sh
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh' ]]; then
-  echo "genbuild.sh not found skipping"
-else
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh
-fi
-if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform' ]]; then
-  echo "build_detect_platform not found skipping"
-else
-sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
-fi
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5/lib" --without-gui --disable-tests
+cd src
+rm -r secp256k1
+git clone https://github.com/bitcoin-core/secp256k1.git
+cd ..
 fi
 make -j$(nproc)
 else
