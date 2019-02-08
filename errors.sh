@@ -6,7 +6,7 @@
 source /etc/functions.sh
 cd $HOME/multipool/daemon_builder
 
-RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --menu "Choose one" -1 60 6 \
+RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --menu "Choose one" -1 60 10 \
 1 "Make clean - does not build only cleans build dir" \
 2 "Fix invalid application of sizeof error" \
 3 "Fix openSSL 1.1x incompatibilities" \
