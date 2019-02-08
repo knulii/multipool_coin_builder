@@ -12,7 +12,11 @@ RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --men
 3 "Fix openSSL 1.1x incompatibilities" \
 4 "Build Berkeley Coin with -fPIC" \
 5 "Build Berkeley Coin with --without-miniupnpc" \
-6 Exit)
+6 "Build Berkeley Attempt to fix secp256k1 build error" \
+7 "Build Berkeley Permission Denied error" \
+8 "Upgrade Berkeley Coin with -fPIC" \
+
+9 Exit)
 if [ $RESULT = ]
 then
 exit;
@@ -54,6 +58,27 @@ exit;
 fi
 
 if [ $RESULT = 6 ]
+then
+clear;
+source secp256k1.sh
+exit;
+fi
+
+if [ $RESULT = 7 ]
+then
+clear;
+source denied.sh
+exit;
+fi
+
+if [ $RESULT = 8 ]
+then
+clear;
+source fPIC_upgrade.sh
+exit;
+fi
+
+if [ $RESULT = 9 ]
 then
 clear;
 exit;
