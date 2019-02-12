@@ -17,12 +17,11 @@ NPROC=$(nproc)
 # clean the build directory, that could be some of the permissions issue
 make clean
 
- #Re-running the permissions string even though it runs the first time, some coins who the hell knows why.
+# Re-running the permissions string even though it runs the first time, some coins who the hell knows why.
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/share/genbuild.sh
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/src/leveldb/build_detect_platform
 
 # Build the coin under the proper configuration
-if [[ ("$autogen" == "true") ]]; then
 if [[ ("$berkeley" == "4.8") ]]; then
 echo "Building using Berkeley 4.8..."
 basedir=$(pwd)
