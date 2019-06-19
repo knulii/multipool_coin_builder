@@ -6,14 +6,16 @@
 source /etc/functions.sh
 cd $HOME/multipool/daemon_builder
 
-RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer v1.20" --menu "Choose one" -1 60 4 \
-1 "Install New Coin from Source" \
-2 "Upgrade Existing Coin" \
-3 "Fix Coin Errors on last build attempt" \
-4 Exit)
+RESULT=$(dialog --stdout --nocancel --default-item 1 --title "Ultimate Crypto-Server Daemon Installer v1.23" --menu "Choose one" -1 60 6 \
+' ' "- New and existing Daemon builds and upgrade -" \
+1 "Build New Coin Daemon from Source Code" \
+2 "Upgrade an Existing Coin Daemon" \
+' ' "- If your last coin failed to build try this -" \
+3 "Daemon Build Failed - Help!" \
+4 Exit 2>&1 > /dev/tty)
 if [ $RESULT = ]
 then
-exit;
+bash $(basename $0) && exit;
 fi
 
 if [ $RESULT = 1 ]

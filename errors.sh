@@ -16,10 +16,10 @@ RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --men
 7 "Build Berkeley Permission Denied error" \
 8 "Upgrade Berkeley Coin with -fPIC" \
 
-9 Exit)
+9 Exit 2>&1 > /dev/tty)
 if [ $RESULT = ]
 then
-exit;
+bash $(basename $0) && exit;
 fi
 
 if [ $RESULT = 1 ]
