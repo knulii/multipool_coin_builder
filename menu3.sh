@@ -10,7 +10,7 @@ RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --men
 1 "Update Berkeley 4.x Coin with autogen file" \
 2 "Update Berkeley 5.x Coin with autogen file" \
 3 "Update Coin with makefile.unix file" \
-4 Exit 2>&1 > /dev/tty)
+4 Exit)
 if [ $RESULT = ]
 then
 exit;
