@@ -31,7 +31,7 @@ fi
 if [[ ("$berkeley" == "4.8") ]]; then
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db4/include -I${STORAGE_ROOT}/openssl/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db4/lib -L${STORAGE_ROOT}/openssl/lib" --without-gui --disable-tests
 else
-./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5/include -I${STORAGE_ROOT}/openssl/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5/lib -L${STORAGE_ROOT}/openssl/lib" --without-gui --disable-tests
+./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5.3/include -I${STORAGE_ROOT}/openssl/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5.3/lib -L${STORAGE_ROOT}/openssl/lib" --without-gui --disable-tests
 fi
 make -j$(nproc)
 

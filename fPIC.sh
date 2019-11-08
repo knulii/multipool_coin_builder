@@ -27,7 +27,7 @@ fi
 if [[ ("$berkeley" == "4.8") ]]; then
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db4/include -O2 -fPIC" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db4/lib" --without-gui --disable-tests
 else
-./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5/include -O2 -fPIC" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5/lib" --without-gui --disable-tests
+./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5.3/include -O2 -fPIC" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5.3/lib" --without-gui --disable-tests
 fi
 make -j$(nproc)
 

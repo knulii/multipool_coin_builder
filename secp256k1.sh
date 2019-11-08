@@ -35,7 +35,7 @@ else
 echo "Building using Berkeley 5.3..."
 basedir=$(pwd)
 sh autogen.sh
-./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5/lib" --without-gui --disable-tests
+./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5.3/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5.3/lib" --without-gui --disable-tests
 cd src
 rm -r secp256k1
 git clone https://github.com/bitcoin-core/secp256k1.git
