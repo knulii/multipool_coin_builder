@@ -25,8 +25,10 @@ sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/src/lev
 fi
 # Build the coin under the proper configuration adding openSSL location
 if [[ ("$berkeley" == "4.8") ]]; then
+make clean
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db4/include -O2 -fPIC" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db4/lib" --without-gui --disable-tests
 else
+make clean
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5.3/include -O2 -fPIC" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5.3/lib" --without-gui --disable-tests
 fi
 make -j$(nproc)
