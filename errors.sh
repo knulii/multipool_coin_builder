@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #####################################################
 # Source code https://github.com/end222/pacmenu
 # Updated by cryptopool.builders for crypto use...
