@@ -17,7 +17,7 @@ set -e
 NPROC=$(nproc)
 
 #get the coind name one more time since we dont store it
-read -e -p -r "Enter the coind name as it is in yiimp, example bitcoind : " pkillcoin
+read -r -e -p "Enter the coind name as it is in yiimp, example bitcoind : " pkillcoin
 
 # re-run autogen file
 sh autogen.sh
@@ -42,10 +42,10 @@ clear
 # LS the SRC dir to have user input bitcoind and bitcoin-cli names
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/src/
 find . -maxdepth 1 -type f \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
-read -e -p -r "Please enter the coind name from the directory above, example bitcoind :" coind
-read -e -p -r "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
+read -r -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
+read -r -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
-read -e -p -r "Please enter the coin-cli name :" coincli
+read -r -e -p "Please enter the coin-cli name :" coincli
 fi
 
 clear

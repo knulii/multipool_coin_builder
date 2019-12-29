@@ -24,8 +24,8 @@ sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/daemon_builder/temp_coin_builds
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
 
 # Get the github information
-read -e -p -r "Enter the name of the coin : " coin
-read -e -p -r "Paste the github link for the coin : " git_hub
+read -r -e -p "Enter the name of the coin : " coin
+read -r -e -p "Paste the github link for the coin : " git_hub
 
 coindir=$coin$now
 
@@ -107,11 +107,11 @@ clear
 # LS the SRC dir to have user input bitcoind and bitcoin-cli names
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/
 find . -maxdepth 1 -type f \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
-read -e -p -r "Please enter the coind name from the directory above, example bitcoind :" coind
-read -e -p -r "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
+read -r -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
+read -r -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
 
 if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
-read -e -p -r "Please enter the coin-cli name :" coincli
+read -r -e -p "Please enter the coin-cli name :" coincli
 fi
 
 clear
