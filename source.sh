@@ -26,6 +26,10 @@ cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
 # Get the github information
 read -r -e -p "Enter the name of the coin : " coin
 read -r -e -p "Paste the github link for the coin : " git_hub
+read -r -e -p "Do you need to use a specific github branch of the coin (y/n) : " branch_git_hub
+if [[ ("$branch_git_hub" == "y" || "$branch_git_hub" == "Y" || "$branch_git_hub" == "yes" || "$branch_git_hub" == "Yes" || "$branch_git_hub" == "YES") ]]; then
+read -r -e -p "Please enter the branch name exactly as in github, i.e. v2.5.1  : " branch_git_hub_ver
+fi
 
 coindir=$coin$now
 
@@ -37,6 +41,9 @@ lastcoin='"${coindir}"'
 # Clone the coin
 if [[ ! -e $coindir ]]; then
 git clone $git_hub $coindir
+if [[ ("$branch_git_hub" == "y" || "$branch_git_hub" == "Y" || "$branch_git_hub" == "yes" || "$branch_git_hub" == "Yes" || "$branch_git_hub" == "YES") ]]; then
+  git checkout $branch_git_hub_ver
+fi 
 else
 echo "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir} already exists.... Skipping"
 echo "If there was an error in the build use the build error options on the installer"
