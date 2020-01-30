@@ -12,7 +12,7 @@ cd $HOME/multipool/daemon_builder
 now=$(date +"%m_%d_%Y")
 set -e
 NPROC=$(nproc)
-if [[ ! -e '$STORAGE_ROOT/coin_builder/temp_coin_builds' ]]; then
+if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds' ]]; then
 sudo mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
 else
 echo "temp_coin_builds already exists.... Skipping"
@@ -41,16 +41,17 @@ lastcoin='"${coindir}"'
 # Clone the coin
 if [[ ! -e $coindir ]]; then
 git clone $git_hub $coindir
+cd "${coindir}"
 if [[ ("$branch_git_hub" == "y" || "$branch_git_hub" == "Y" || "$branch_git_hub" == "yes" || "$branch_git_hub" == "Yes" || "$branch_git_hub" == "YES") ]]; then
-  git checkout $branch_git_hub_ver
-fi 
+  git fetch
+  git checkout "$branch_git_hub_ver"
+  coindir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+fi
 else
 echo "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir} already exists.... Skipping"
 echo "If there was an error in the build use the build error options on the installer"
 exit 0
 fi
-
-cd "${coindir}"
 
 # Build the coin under the proper configuration
 if [[ ("$autogen" == "true") ]]; then
@@ -70,7 +71,7 @@ sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leve
 fi
 ./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db4/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db4/lib" --without-gui --disable-tests
 else
-echo "Building using Berkeley 5.3..."
+echo "Building using Berkeley 5.1..."
 basedir=$(pwd)
 sh autogen.sh
 if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh' ]]; then
@@ -83,7 +84,7 @@ if [[ ! -e '$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb
 else
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
 fi
-./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5.3/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5.3/lib" --without-gui --disable-tests
+./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5/lib" --without-gui --disable-tests
 fi
 make -j$(nproc)
 else

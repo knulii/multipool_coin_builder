@@ -23,17 +23,11 @@ sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/share/g
 sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${lastcoin}/src/leveldb/build_detect_platform
 
 # Build the coin under the proper configuration
-if [[ ("$berkeley" == "4.8") ]]; then
-echo "Building using Berkeley 4.8..."
+echo "Building using Berkeley 5.3..."
 basedir=$(pwd)
 sh autogen.sh
-./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db4/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db4/lib" --without-gui --disable-tests
-else
-echo "Building using Berkeley 5.1..."
-basedir=$(pwd)
-sh autogen.sh
-./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5/lib" --without-gui --disable-tests
-fi
+./configure CPPFLAGS="-I${STORAGE_ROOT}/berkeley/db5.3/include -O2" LDFLAGS="-L${STORAGE_ROOT}/berkeley/db5.3/lib" --without-gui --disable-tests
+
 make -j$(nproc)
 
 clear

@@ -15,9 +15,10 @@ RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Daemon Installer" --men
 5 "Build Berkeley Coin with --without-miniupnpc" \
 6 "Build Berkeley Attempt to fix secp256k1 build error" \
 7 "Build Berkeley Permission Denied error" \
-8 "Upgrade Berkeley Coin with -fPIC" \
+8 "Build Berkeley with DB5.3" \
+9 "Upgrade Berkeley Coin with -fPIC" \
 
-9 Exit)
+10 Exit)
 if [ $RESULT = ]
 then
 bash $(basename $0) && exit;
@@ -80,6 +81,13 @@ exit;
 fi
 
 if [ $RESULT = 9 ]
+then
+clear;
+source build_db53.sh
+exit;
+fi
+
+if [ $RESULT = 10 ]
 then
 clear;
 exit;
