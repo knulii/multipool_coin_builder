@@ -45,7 +45,6 @@ cd "${coindir}"
 if [[ ("$branch_git_hub" == "y" || "$branch_git_hub" == "Y" || "$branch_git_hub" == "yes" || "$branch_git_hub" == "Yes" || "$branch_git_hub" == "YES") ]]; then
   git fetch
   git checkout "$branch_git_hub_ver"
-  coindir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 fi
 else
 echo "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir} already exists.... Skipping"
