@@ -42,17 +42,16 @@ lastcoin='"${coindir}"'
 # Clone the coin
 if [[ ! -e $coindir ]]; then
 git clone $git_hub $coindir
+cd "${coindir}"
 if [[ ("$branch_git_hub" == "y" || "$branch_git_hub" == "Y" || "$branch_git_hub" == "yes" || "$branch_git_hub" == "Yes" || "$branch_git_hub" == "YES") ]]; then
   git fetch
-  git checkout $branch_git_hub_ver
+  git checkout "$branch_git_hub_ver"
 fi
 else
 echo "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir} already exists.... Skipping"
 echo "If there was an error in the build use the build error options on the installer"
 exit 0
 fi
-
-cd "${coindir}"
 
 # Build the coin under the proper configuration
 if [[ ("$autogen" == "true") ]]; then
