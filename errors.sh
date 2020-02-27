@@ -76,14 +76,14 @@ fi
 if [ $RESULT = 8 ]
 then
 clear;
-source fPIC_upgrade.sh
+source build_db53.sh
 exit;
 fi
 
 if [ $RESULT = 9 ]
 then
 clear;
-source build_db53.sh
+source fPIC_upgrade.sh
 exit;
 fi
 
